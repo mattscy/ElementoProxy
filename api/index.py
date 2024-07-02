@@ -21,7 +21,7 @@ class Handler(BaseHTTPRequestHandler):
 
         try:
             # Forward the request to the target URL
-            response = requests.get(target_url)
+            response = requests.get(target_url, headers={"Authorization": self.headers.get("Authorization")})
 
             if response.status_code == 200:
                 # Try to decode the response as JSON
