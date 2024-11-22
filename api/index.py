@@ -5,6 +5,15 @@ import json
 from urllib.parse import urlparse, parse_qs
 
 class Handler(BaseHTTPRequestHandler):
+
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+
     def do_GET(self):
         # Parse the request URL to extract the query parameters
         parsed_url = urlparse(self.path)
@@ -19,11 +28,17 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             return
 
-        response = requests.get(target_url)
-        if (request.method == "OPTIONS"):
-            return HttpResponse("OPTIONS")
-        response['Access-Control-Allow-Origin'] = "*"
-        return response
+        try:
+            response = requests.get(target_url)
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+        except Exception as e:
+            # If any other error occurs, return 500 Internal Server Error
+            self.send_response(500)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': f'Proxy error: {str(e)}'}).encode('utf-8'))
 
         # try:
         #     # Forward the request to the target URL
