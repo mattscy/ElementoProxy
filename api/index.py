@@ -33,22 +33,28 @@ class Handler(BaseHTTPRequestHandler):
             response = requests.get(target_url)
 
             if response.status_code == 200:
+                self.send_response(200)
+                self.send_header('Content-type', 'application/pdf')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(response.text.encode('utf-8'))
+
                 # Try to decode the response as JSON
-                try:
-                    json_data = response.json()
-                    # If successful, return the JSON response with a 200 OK status
-                    self.send_response(200)
-                    self.send_header('Content-type', 'application/json')
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.end_headers()
-                    self.wfile.write(json.dumps(json_data).encode('utf-8'))
-                except ValueError:
-                    # If decoding as JSON fails, return the response as plain text
-                    self.send_response(200)
-                    self.send_header('Content-type', 'application/json')
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({'data': response.text}).encode('utf-8'))
+                # try:
+                #     json_data = response.json()
+                #     # If successful, return the JSON response with a 200 OK status
+                #     self.send_response(200)
+                #     self.send_header('Content-type', 'application/json')
+                #     self.send_header('Access-Control-Allow-Origin', '*')
+                #     self.end_headers()
+                #     self.wfile.write(json.dumps(json_data).encode('utf-8'))
+                # except ValueError:
+                #     # If decoding as JSON fails, return the response as plain text
+                #     self.send_response(200)
+                #     self.send_header('Content-type', 'application/json')
+                #     self.send_header('Access-Control-Allow-Origin', '*')
+                #     self.end_headers()
+                #     self.wfile.write(json.dumps({'data': response.text}).encode('utf-8'))
             else:
                 # If GET request failed, return 502 Bad Gateway
                 self.send_response(502)
