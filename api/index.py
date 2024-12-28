@@ -37,7 +37,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'application/pdf')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                self.wfile.write(response.raw.read())
+                self.wfile.write(response.content)
 
                 # Try to decode the response as JSON
                 # try:
