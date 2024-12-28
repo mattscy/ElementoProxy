@@ -34,10 +34,10 @@ class Handler(BaseHTTPRequestHandler):
 
             if response.status_code == 200:
                 self.send_response(200)
-                self.send_header('Content-type', 'blob')
+                self.send_header('Content-type', 'application/pdf')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                self.wfile.write(response.text.encode('utf-8'))
+                self.wfile.write(response.raw.read())
 
                 # Try to decode the response as JSON
                 # try:
