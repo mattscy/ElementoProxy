@@ -7,8 +7,10 @@ from urllib.parse import urlparse, parse_qs
 class Handler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
+        target_url = query_params.get('url', [''])[0]
+
         self.send_response(200, "ok")
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', target_url)
         self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
         self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
