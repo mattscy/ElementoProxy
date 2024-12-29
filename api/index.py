@@ -7,6 +7,8 @@ from urllib.parse import urlparse, parse_qs
 class Handler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
+        parsed_url = urlparse(self.path)
+        query_params = parse_qs(parsed_url.query)
         target_url = query_params.get('url', [''])[0]
 
         self.send_response(200, "ok")
