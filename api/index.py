@@ -79,7 +79,7 @@ class Handler(BaseHTTPRequestHandler):
                     os.remove(cachePath)
 
             self.send_response(200)
-            self.send_header('Content-type', 'application/blob; charset=UTF-8')
+            self.send_header('Content-type', 'application/pdf')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             self.wfile.write(chunk)
